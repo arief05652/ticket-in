@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,12 +17,18 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.php">Ticket-In</a>
+        </div>
+    </nav>
+
     <!-- FORM LOGIN -->
-    <div class="container mt-5">
+    <div class="container-fluid-sm container-md mt-5">
         <div class="d-flex justify-content-center px-sm-0 px-lg-5 py-5">
-            <div class="w-50 rounded shadow-lg bg-light-subtle px-sm-1 px-md-2 py-sm-0 py-md-1 px-lg-5">
+            <div class="w-50 rounded shadow-lg px-sm-2 px-md-3 py-sm-0 py-md-1 px-lg-5">
                 <div class="d-flex flex-column">
-                    <div class="lead text-center pb-2 pt-3">
+                    <div class="lead text-center pb-3 pt-3">
                         Login | Ticket-In
                     </div>
                     <form action="" method="POST" class="was-validated">
@@ -36,7 +50,7 @@
                         </div>
                         <!-- button -->
                         <div class="mb-4">
-                            <button class="btn btn-success w-100" type="submit" name="daftar">Masuk</button>
+                            <button class="btn btn-success w-100" type="submit" name="masuk">Masuk</button>
                         </div>
                         <div class="text-center">
                             <p>Belum punya akun? <a href="register.php">klik disini</a></p>

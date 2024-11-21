@@ -10,8 +10,8 @@ class Database {
     public function getConnect() {
         try {
             $this->conn = mysqli_connect($this->host, $this->username, $this->password, $this->database);
-        } catch (mysqli_sql_exception) {
-            return "error db";
+        } catch (mysqli_sql_exception $e) {
+            return "error: ". $e;
         }
     }
 

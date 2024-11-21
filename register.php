@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (isset($_POST['daftar'])) {
+    header('Location: login.php');
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,34 +19,48 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.php">Ticket-In</a>
+        </div>
+    </nav>
     <!-- FORM REGISTER -->
-    <div class="container mt-5">
+    <div class="container-fluid-sm container-md mt-5">
         <div class="d-flex justify-content-center px-sm-0 px-lg-5 py-5">
-            <div class="w-50 rounded shadow-lg bg-light-subtle px-sm-1 px-md-2 py-sm-0 py-md-1 px-lg-5">
+            <div class="w-75 rounded shadow-lg px-sm-2 px-md-3 py-sm-0 py-md-1 px-lg-5">
                 <div class="d-flex flex-column">
-                    <div class="lead text-center pb-2 pt-3">
+                    <div class="lead text-center pb-3 pt-3">
                         Register | Ticket-In
                     </div>
                     <form action="" method="POST" class="was-validated">
                         <!-- email -->
                         <div class="mb-2">
                             <label for="exampleInputEmail1" class="form-label">Email:</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" required aria-describedby="emailHelp">
+                            <input type="email" class="form-control" id="exampleInputEmail1" required>
+                        </div>
+                        <!-- nama depan -->
+                        <div class="mb-2">
+                            <label for="exampleInputEmail1" class="form-label">Nama depan:</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" required>
+                        </div>
+                        <!-- nama belakang -->
+                        <div class="mb-2">
+                            <label for="exampleInputEmail1" class="form-label">Nama belakang:</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" required>
                         </div>
                         <!-- password -->
                         <div class="mb-2">
                             <label for="exampleInputPassword" class="form-label">Password:</label>
-                            <input type="password" class="form-control" id="exampleInputPassword" required aria-describedby="passwordHelp">
+                            <input type="password" class="form-control" id="exampleInputPassword" required>
                         </div>
-                        <!-- remember me -->
+                        <!-- re-type password -->
                         <div class="mb-4">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                            </label>
+                            <label for="exampleInputPassword" class="form-label">Re-type password:</label>
+                            <input type="password" class="form-control" id="exampleInputPassword" required>
                         </div>
                         <!-- button -->
                         <div class="mb-4">
-                            <button class="btn btn-success w-100" type="submit" name="daftar">Masuk</button>
+                            <button class="btn btn-success w-100" type="submit" name="daftar">Daftar</button>
                         </div>
                         <div class="text-center">
                             <p>Sudah punya akun? <a href="login.php">klik disini</a></p>
@@ -46,7 +70,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
