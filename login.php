@@ -1,3 +1,20 @@
+<?php
+session_start();
+
+require_once './system/auth.php';
+
+$error_msg = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $pass = $_POST['password'];
+
+    Auth::loginUser($email, $pass);
+    $error_msg = Auth::$error;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,24 +26,34 @@
 </head>
 
 <body>
+    <!-- <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.php">Ticket-In</a>
+        </div>
+    </nav> -->
+
     <!-- FORM LOGIN -->
-    <div class="container mt-5">
+    <div class="container-fluid-sm container-md mt-5">
         <div class="d-flex justify-content-center px-sm-0 px-lg-5 py-5">
-            <div class="w-50 rounded shadow-lg bg-light-subtle px-sm-1 px-md-2 py-sm-0 py-md-1 px-lg-5">
+            <div class="w-50 rounded shadow-lg px-sm-2 px-md-3 py-sm-0 py-md-1 px-lg-5">
                 <div class="d-flex flex-column">
-                    <div class="lead text-center pb-2 pt-3">
+                    <div class="lead text-center pb-3 pt-3">
                         Login | Ticket-In
                     </div>
-                    <form action="" method="POST" class="was-validated">
+
+                    <!-- error msg -->
+                    <p><?= $error_msg ?></p>
+
+                    <form action="" method="post" class="was-validated">
                         <!-- email -->
                         <div class="mb-2">
                             <label for="exampleInputEmail1" class="form-label">Email:</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" required aria-describedby="emailHelp">
+                            <input type="email" class="form-control" name="email" id="exampleInputEmail1" required>
                         </div>
                         <!-- password -->
                         <div class="mb-2">
                             <label for="exampleInputPassword" class="form-label">Password:</label>
-                            <input type="password" class="form-control" id="exampleInputPassword" required aria-describedby="passwordHelp">
+                            <input type="password" class="form-control" name="password" id="exampleInputPassword" required>
                         </div>
                         <!-- remember me -->
                         <div class="mb-4">
@@ -36,12 +63,13 @@
                         </div>
                         <!-- button -->
                         <div class="mb-4">
-                            <button class="btn btn-success w-100" type="submit" name="daftar">Masuk</button>
+                            <button class="btn btn-success w-100" type="submit">Masuk</button>
                         </div>
                         <div class="text-center">
                             <p>Belum punya akun? <a href="register.php">klik disini</a></p>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
