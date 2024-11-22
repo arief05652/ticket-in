@@ -117,4 +117,40 @@ if (isset($_POST['masuk'])) {
         </div>
     </section>
 
+    <!-- service -->
+    <section>
+        <div class="service-height container-fluid-sm container-md py-3">
+            <div class="row">
+
+                <div class="col-sm-12 col-md-6 mb-sm-2">
+                    <div class="border shadow-lg rounded py-4">
+                        <div class="d-sm-flex">
+                            <div class="w-50 lead align-self-center text-center">
+                                Pembelian secara online
+                            </div>
+                            <div class="w-50 d-flex justify-content-center">
+                                <img src="public/assets/costumer-service.png" width="50%" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6">
+                    <div class="border shadow-lg rounded py-4">
+                        <div class="d-sm-flex">
+                            <div class="w-50 lead align-self-center text-center">
+                                Pembelian secara online
+                            </div>
+                            <div class="w-50 d-flex justify-content-center">
+                                <img src="public/assets/costumer-service.png" width="50%" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
     <?php include 'utils/bottom.php' ?>

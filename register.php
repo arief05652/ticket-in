@@ -1,10 +1,25 @@
 <?php
 session_start();
 
-if (isset($_POST['daftar'])) {
-    header('Location: login.php');
-}
+require_once './system/auth.php';
 
+$error_msg = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // ambil dari form
+    $email = $_POST['email'];
+    $nama_depan = $_POST['nama-depan'];
+    $nama_belakang = $_POST['nama-belakang'];
+    $password = $_POST['password'];
+    $re_type = $_POST['re-type'];
+
+    if ($password !== $re_type) {
+        $error_msg = "Harap masukan password dengan benar";
+    } else {
+        Auth::newUser($email, $nama_depan, $nama_belakang, $password);
+        $error_msg = Auth::$error;
+    }
+}
 ?>
 
 
@@ -29,34 +44,40 @@ if (isset($_POST['daftar'])) {
         <div class="d-flex justify-content-center px-sm-0 px-lg-5 py-5">
             <div class="w-75 rounded shadow-lg px-sm-2 px-md-3 py-sm-0 py-md-1 px-lg-5">
                 <div class="d-flex flex-column">
-                    <div class="lead text-center pb-3 pt-3">
+                    <div class="lead text-center mb-2 pt-3">
                         Register | Ticket-In
                     </div>
-                    <form action="" method="POST" class="was-validated">
+
+                    <!-- notif pesan -->
+                    <div class="d-flex justify-content-center">
+                        <p class="pt-2"><?= $error_msg ?></p>
+                    </div>
+
+                    <form action="" method="post" class="was-validated">
                         <!-- email -->
                         <div class="mb-2">
                             <label for="exampleInputEmail1" class="form-label">Email:</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" required>
+                            <input type="email" name="email" class="form-control" id="exampleInputEmail1" required>
                         </div>
                         <!-- nama depan -->
                         <div class="mb-2">
                             <label for="exampleInputEmail1" class="form-label">Nama depan:</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" required>
+                            <input type="text" name="nama-depan" class="form-control" id="exampleInputEmail1" required>
                         </div>
                         <!-- nama belakang -->
                         <div class="mb-2">
                             <label for="exampleInputEmail1" class="form-label">Nama belakang:</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" required>
+                            <input type="text" name="nama-belakang" class="form-control" id="exampleInputEmail1" required>
                         </div>
                         <!-- password -->
                         <div class="mb-2">
                             <label for="exampleInputPassword" class="form-label">Password:</label>
-                            <input type="password" class="form-control" id="exampleInputPassword" required>
+                            <input type="password" name="password" class="form-control" id="exampleInputPassword" required>
                         </div>
                         <!-- re-type password -->
                         <div class="mb-4">
                             <label for="exampleInputPassword" class="form-label">Re-type password:</label>
-                            <input type="password" class="form-control" id="exampleInputPassword" required>
+                            <input type="password" name="re-type" class="form-control" id="exampleInputPassword" required>
                         </div>
                         <!-- button -->
                         <div class="mb-4">
@@ -66,6 +87,7 @@ if (isset($_POST['daftar'])) {
                             <p>Sudah punya akun? <a href="login.php">klik disini</a></p>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>

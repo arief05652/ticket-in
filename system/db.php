@@ -1,21 +1,22 @@
 <?php
-class Database {
-    private $host = 'localhost';
-    private $username = 'user_db';
-    private $password = 'api_services';
-    private $database = 'test_db';
+class Database
+{
+    private static $host = 'localhost';
+    private static $username = 'user_db';
+    private static $password = 'wtunBwVrgdFMsmWf';
+    private static $database = 'final_project';
 
-    public $conn;
+    public static function getConnect()
+    {
+        $conn = null;
 
-    public function getConnect() {
         try {
-            $this->conn = mysqli_connect($this->host, $this->username, $this->password, $this->database);
-        } catch (mysqli_sql_exception $e) {
-            return "error: ". $e;
+            $conn = new PDO("mysql:host=". self::$host .";dbname=". self::$database, self::$username, self::$password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $exception) {
+            return "Koneksi gagal: " . $exception->getMessage();
         }
-    }
 
-    public function __destruct() {
-        mysqli_close($this->conn);
+        return $conn;
     }
 }

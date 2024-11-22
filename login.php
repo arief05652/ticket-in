@@ -1,8 +1,17 @@
 <?php
 session_start();
 
+require_once './system/auth.php';
 
+$error_msg = '';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $pass = $_POST['password'];
+
+    Auth::loginUser($email, $pass);
+    $error_msg = Auth::$error;
+}
 ?>
 
 
@@ -17,11 +26,11 @@ session_start();
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
+    <!-- <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.php">Ticket-In</a>
         </div>
-    </nav>
+    </nav> -->
 
     <!-- FORM LOGIN -->
     <div class="container-fluid-sm container-md mt-5">
@@ -31,16 +40,20 @@ session_start();
                     <div class="lead text-center pb-3 pt-3">
                         Login | Ticket-In
                     </div>
-                    <form action="" method="POST" class="was-validated">
+
+                    <!-- error msg -->
+                    <p><?= $error_msg ?></p>
+
+                    <form action="" method="post" class="was-validated">
                         <!-- email -->
                         <div class="mb-2">
                             <label for="exampleInputEmail1" class="form-label">Email:</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" required aria-describedby="emailHelp">
+                            <input type="email" class="form-control" name="email" id="exampleInputEmail1" required>
                         </div>
                         <!-- password -->
                         <div class="mb-2">
                             <label for="exampleInputPassword" class="form-label">Password:</label>
-                            <input type="password" class="form-control" id="exampleInputPassword" required aria-describedby="passwordHelp">
+                            <input type="password" class="form-control" name="password" id="exampleInputPassword" required>
                         </div>
                         <!-- remember me -->
                         <div class="mb-4">
@@ -50,12 +63,13 @@ session_start();
                         </div>
                         <!-- button -->
                         <div class="mb-4">
-                            <button class="btn btn-success w-100" type="submit" name="masuk">Masuk</button>
+                            <button class="btn btn-success w-100" type="submit">Masuk</button>
                         </div>
                         <div class="text-center">
                             <p>Belum punya akun? <a href="register.php">klik disini</a></p>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
