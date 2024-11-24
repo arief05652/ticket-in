@@ -5,6 +5,8 @@ require_once './system/auth.php';
 
 $error_msg = '';
 
+$error_msg = $_SESSION['daftar-sukses'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $pass = $_POST['password'];
@@ -26,11 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <!-- <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.php">Ticket-In</a>
-        </div>
-    </nav> -->
+    <?php include './utils/auth_navbar.php'; ?>
 
     <!-- FORM LOGIN -->
     <div class="container-fluid-sm container-md mt-5">
@@ -41,8 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         Login | Ticket-In
                     </div>
 
-                    <!-- error msg -->
-                    <p><?= $error_msg ?></p>
+                    <!-- notif pesan -->
+                    <div class="d-flex justify-content-center">
+                        <p class="pt-2"><?= $error_msg ?></p>
+                    </div>
 
                     <form action="" method="post" class="was-validated">
                         <!-- email -->

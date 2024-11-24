@@ -1,0 +1,92 @@
+@startuml class diagram
+
+' class User
+class Users {
+    + email
+    - password
+    + nama_depan
+    + nama_belakang
+    # no_hp
+    
+    + registUser()
+    + loginUser()
+}
+
+' class UserProfile
+class UsersProfile {
+    + nama_depan
+    + nama_belakang
+    + username
+    + email
+    # no_hp
+
+    + updateUserInfo()
+    + showInfo()
+}
+
+' class Jadwal
+class Jadwal {
+    + jam_berangkat
+
+    + deleteRute()
+    + updateJadwal()
+    + createJadwal()
+}
+
+' class Rute
+class Rute {
+    + tujuan
+    + penjemputan
+    + penurunan
+
+    + showRute()
+    + createRute()
+}
+
+' class Bis
+class Bis {
+    + merk
+    + kapasitas
+    + status
+    # no_plat
+
+    + showBis()
+    + registBis()
+    + sort()
+}
+
+' class Tiket
+class Tiket {
+    + harga
+    + stok 
+
+    + showTiket()
+    + createTiket()
+    + sortingTiket()
+    + deleteTiket()
+}
+
+' class Pesanan
+class Pesanan {
+    + jumlah_pesanan
+    + waktu_pesanan
+    + status
+    --
+    + showTransaction()
+    + showListPesanan()
+    + acceptPesanan()
+    + declinePesanan()
+    .. buy tiket ..
+    + userBuyingTiket()
+    + userCancelTiket()
+}
+
+' relasi class
+Jadwal "1" *-- "1" Tiket
+Rute "1" <.. "1" Jadwal
+Bis "1" <.. "1" Jadwal
+Users "1" -- "many" Tiket
+Users "1" -- "1" UsersProfile
+Pesanan "many" -- "1" Users
+
+@enduml

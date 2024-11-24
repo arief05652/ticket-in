@@ -41,6 +41,7 @@ class Auth
 
             $_SESSION['daftar-sukses'] = "Berhasil mendaftar silahkan login";
 
+            // direct ke loin.php
             header('Location: login.php');
         }
     }
@@ -56,11 +57,25 @@ class Auth
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($stmt->rowCount() == 0) {
+        // cek email
+        if ($stmt->rowCount() === 0) {
             self::$error = "Email tidak terdaftar";
         } else {
             if ($user && password_verify($pass, $user['password'])) {
-                self::$error = "login";
+                // set session
+                $_SESSION['role'] = $user['role'];
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['email'] = $user['email'];
+
+                // direct page sesuai role nya
+                if ($user['role'] === 'USER') {
+                    header('Location: ../user/dashboard.php');
+                    exit;
+                } elseif ($user['role'] === 'ADMIN') {
+                    header('Location: ../admin/dashboard.php');
+                    exit;
+                }
+
             } else {
                 self::$error = "Password salah";
             }

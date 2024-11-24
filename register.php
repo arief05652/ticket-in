@@ -34,11 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.php">Ticket-In</a>
-        </div>
-    </nav>
+    <?php include './utils/auth_navbar.php'; ?>
+
     <!-- FORM REGISTER -->
     <div class="container-fluid-sm container-md mt-5">
         <div class="d-flex justify-content-center px-sm-0 px-lg-5 py-5">
