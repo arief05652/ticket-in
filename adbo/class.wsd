@@ -1,92 +1,53 @@
 @startuml class diagram
 
-' class User
 class Users {
-    + email
+    + user_id
+    + email 
+    + password
+    + nama_depan
+    + nama_belakang
+    + no_hp
+    + role
+}
+
+Users "1" -- "1" Auth
+Database "1" *-- "1" Auth
+
+class Database {
+    - host
+    - username
     - password
-    + nama_depan
-    + nama_belakang
-    # no_hp
-    
-    + registUser()
+    - database
+
+    + getConnect()
+}
+note top of Database: Buka koneksi ke database
+
+class Auth {
+    + error
+
     + loginUser()
+    + registUser()
 }
 
-' class UserProfile
-class UsersProfile {
-    + nama_depan
-    + nama_belakang
-    + username
-    + email
-    # no_hp
+Users "1" -- "1" Profile
 
-    + updateUserInfo()
-    + showInfo()
+class Profile {
+    + showProfileUser()
+    + historyOrder()
+    + orderActive()
+    + cancelOrder()
 }
 
-' class Jadwal
-class Jadwal {
-    + jam_berangkat
-
-    + deleteRute()
-    + updateJadwal()
-    + createJadwal()
-}
-
-' class Rute
-class Rute {
-    + tujuan
-    + penjemputan
-    + penurunan
-
-    + showRute()
-    + createRute()
-}
-
-' class Bis
-class Bis {
-    + merk
-    + kapasitas
-    + status
-    # no_plat
-
-    + showBis()
-    + registBis()
-    + sort()
-}
-
-' class Tiket
 class Tiket {
-    + harga
-    + stok 
-
-    + showTiket()
-    + createTiket()
-    + sortingTiket()
-    + deleteTiket()
+    + listTiket()
+    + buyTiket()
+    + searchTiket()
 }
 
-' class Pesanan
-class Pesanan {
-    + jumlah_pesanan
-    + waktu_pesanan
-    + status
-    --
-    + showTransaction()
-    + showListPesanan()
-    + acceptPesanan()
-    + declinePesanan()
-    .. buy tiket ..
-    + userBuyingTiket()
-    + userCancelTiket()
+class HandleTopup {
+    + listRequestTopup()
+    + detailTopup()
 }
-
-' relasi class
-Jadwal "1" *-- "1" Tiket
-Rute "1" <.. "1" Jadwal
-Bis "1" <.. "1" Jadwal
-Users "1" -- "many" Tiket
-Users "1" -- "1" UsersProfile
-Pesanan "many" -- "1" Users
 
 @enduml

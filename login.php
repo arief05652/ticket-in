@@ -3,16 +3,26 @@ session_start();
 
 require_once './system/auth.php';
 
-$error_msg = '';
+// validasi jika sudah login langsung di direct
+if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'pelanggan') {
+    header('Location: user/dashboard.php');
+    exit;
+} elseif (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
+    header('Location: admin/dashboard.php');
+    exit;
+}
 
+$error_msg = '';
 $error_msg = $_SESSION['daftar-sukses'];
+
+$login = new Auth();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $pass = $_POST['password'];
 
-    Auth::loginUser($email, $pass);
-    $error_msg = Auth::$error;
+    $login->loginUser($email, $pass);
+    $error_msg = $login->error;
 }
 ?>
 
@@ -33,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- FORM LOGIN -->
     <div class="container-fluid-sm container-md mt-5">
         <div class="d-flex justify-content-center px-sm-0 px-lg-5 py-5">
-            <div class="w-50 rounded shadow-lg px-sm-2 px-md-3 py-sm-0 py-md-1 px-lg-5">
+            <div class="w-50 border rounded shadow-lg px-sm-2 px-md-3 py-sm-0 py-md-1 px-lg-5">
                 <div class="d-flex flex-column">
                     <div class="lead text-center pb-3 pt-3">
                         Login | Ticket-In

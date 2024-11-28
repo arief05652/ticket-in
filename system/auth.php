@@ -4,51 +4,16 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 require './system/db.php';
+require_once './system/user.php';
 
 // buka koneksi database
 $db = Database::getConnect();
 
-class Auth
-{
-    public static $error = "";
-
-    // register new user
-    public static function newUser($email, $namadpn, $namablkng, $pass)
-    {
-        global $db;
-
-        $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-
-        // cek user
-        if ($stmt->rowCount() > 0) {
-            self::$error = "Email sudah terdaftar";
-        } else {
-            // hash password
-            $hash_pass = password_hash($pass, PASSWORD_BCRYPT);
-
-            // insert user ke db
-            $stmt = $db->prepare(
-                "INSERT INTO users (nama_depan, nama_belakang, email, password)
-                VALUES (:namadpn, :namablkng, :email, :password)"
-            );
-            $stmt->bindParam(':namadpn', $namadpn);
-            $stmt->bindParam(':namablkng', $namablkng);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':password', $hash_pass);
-            $stmt->execute();
-
-            $_SESSION['daftar-sukses'] = "Berhasil mendaftar silahkan login";
-
-            // direct ke loin.php
-            header('Location: login.php');
-        }
-    }
+class Auth extends Users {
+    public $error = '';
 
     // login user
-    public static function loginUser($email, $pass)
-    {
+    public function loginUser($email, $pass) {
         global $db;
 
         $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
@@ -59,7 +24,7 @@ class Auth
 
         // cek email
         if ($stmt->rowCount() === 0) {
-            self::$error = "Email tidak terdaftar";
+            $this->error = "Email tidak terdaftar";
         } else {
             if ($user && password_verify($pass, $user['password'])) {
                 // set session
@@ -68,17 +33,50 @@ class Auth
                 $_SESSION['email'] = $user['email'];
 
                 // direct page sesuai role nya
-                if ($user['role'] === 'USER') {
+                if ($user['role'] === 'pelanggan') {
                     header('Location: ../user/dashboard.php');
                     exit;
-                } elseif ($user['role'] === 'ADMIN') {
+                } elseif ($user['role'] === 'admin') {
                     header('Location: ../admin/dashboard.php');
                     exit;
                 }
-
             } else {
-                self::$error = "Password salah";
+                $this->error = "Password salah";
             }
+        }
+    }
+
+    // register user
+    public function registUser($email, $namadpn, $namablkng, $pass) {
+        global $db;
+
+        $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
+
+        // cek user
+        if ($stmt->rowCount() > 0) {
+            $this->error = "Email sudah terdaftar";
+        } else {
+            // hash password
+            $hash_pass = password_hash($pass, PASSWORD_BCRYPT);
+
+            // insert user ke db
+            $stmt = $db->prepare(
+                "INSERT INTO users (nama_dpn, nama_blkg, email, password)
+                VALUES (:namadpn, :namablkng, :email, :password)"
+            );
+            $stmt->bindParam(':namadpn', $namadpn);
+            $stmt->bindParam(':namablkng', $namablkng);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':password', $hash_pass);
+            $stmt->execute();
+
+            $_SESSION['daftar-sukses'] = "Berhasil mendaftar silahkan login";
+
+            // direct ke login.php
+            header('Location: login.php');
+            exit;
         }
     }
 }

@@ -1,23 +1,29 @@
 <?php
 session_start();
 
+// validasi jika sudah login langsung di direct
+if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'pelanggan') {
+    header('Location: user/dashboard.php');
+    exit;
+} elseif (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
+    header('Location: admin/dashboard.php');
+    exit;
+}
+
 // tanggal
 $min_date = date('Y-m-d', strtotime('-2 days'));
 $max_date = date('Y-m-d', strtotime('+3 days'));
 
 if (isset($_POST['masuk'])) {
     header("Location: login.php");
+    exit;
 } else if (isset($_POST['daftar'])) {
     header("Location: register.php");
+    exit;
 } elseif (isset($_POST['cari-ticket'])) {
     header("Location: schedule.php");
+    exit;
 }
-
-/**
- * $_POST['kota-asal']
- * $_POST['kota-tujuan']
- * $_POST['schedule']
- */
 
 ?>
 
