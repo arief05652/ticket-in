@@ -6,7 +6,7 @@
 /* Small devices (≥576px) */
 @media (min-width: 576px) {
     .jumbotron-height {
-        height: 20rem;
+        height: 22rem;
     }
 
     .slogan-hidden {
@@ -19,7 +19,7 @@
 /* Medium devices (≥768px) */
 @media (min-width: 768px) {
     .jumbotron-height {
-        height: 25rem;
+        height: 23rem;
     }
     .slogan-hidden {
         display: none;
@@ -30,7 +30,7 @@
 /* Large devices (≥992px) */
 @media (min-width: 992px) {
     .jumbotron-height {
-        height: 30rem;
+        height: 23rem;
     }
     .slogan-hidden {
         display: grid;
@@ -39,14 +39,10 @@
 
 /* Extra large devices (≥1200px) */
 @media (min-width: 1200px) {
-    .jumbotron-height {
-        height: 30rem;
-    }
+
 }
 
 /* Extra extra large devices (≥1400px) */
 @media (min-width: 1400px) {
-    .jumbotron-height {
-        height: 30rem;
-    }
+
 }

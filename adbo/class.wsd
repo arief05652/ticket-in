@@ -1,53 +1,107 @@
-@startuml class diagram
+@startuml class_diagram
+' o = agregate
 
-class Users {
-    + user_id
-    + email 
+Jadwal "1" -- "1" Bis
+Jadwal "1" -- "1" Rute
+Jadwal *-- Tiket
+User "1" -- "1" UserProfile
+Pesanan "0..1" -- "1" Tiket
+Pesanan "0..*" -- "1" User
+Balance "1" -- "1" User
+Topup "0..1" -- "1" User
+Topup "1" -- "1" Balance
+
+class Topup {
+    + id_topup
+    + id_user
+    + id_balance
+    + jumlah
+
+    + topupBalance()
+    + cancelTopup()
+}
+
+class Balance {
+    + id_balance
+    + id_user
+    + Balance
+
+    + lihatBalance()
+}
+
+class Pesanan {
+    + id_pesanan
+    + id_tiket
+    + id_user
+    + jumlah
+
+    + buatPesanan()
+    + cancelPesanan()
+}
+
+class UserProfile {
+    + id_user
+
+    + lihatProfile()
+    + ubahProfile()
+    + lihatPesanan()
+    + lihatOrder()
+}
+
+class User {
+    + id_user
+    + email
     + password
     + nama_depan
     + nama_belakang
     + no_hp
-    + role
-}
-
-Users "1" -- "1" Auth
-Database "1" *-- "1" Auth
-
-class Database {
-    - host
-    - username
-    - password
-    - database
-
-    + getConnect()
-}
-note top of Database: Buka koneksi ke database
-
-class Auth {
-    + error
-
-    + loginUser()
-    + registUser()
-}
-
-Users "1" -- "1" Profile
-
-class Profile {
-    + showProfileUser()
-    + historyOrder()
-    + orderActive()
-    + cancelOrder()
+    
+    + login()
+    + register()
 }
 
 class Tiket {
-    + listTiket()
-    + buyTiket()
-    + searchTiket()
+    + id_tiket
+    + id_jadwal
+    + harga
+    + stok
+
+    + tambahTiket()
+    + ubahTiket()
+    + hapusTiket()
 }
 
-class HandleTopup {
-    + listRequestTopup()
-    + detailTopup()
+class Jadwal {
+    + id_jadwal
+    + id_rute
+    + id_bis
+    + jam_berangkat
+
+    + lihatJadwal()
+    + ubahJadwal()
+    + hapusJadwal()
+}
+
+class Rute {
+    + id_rute
+    + tujuan
+    + penjemputan
+    + penurunan
+
+    + lihatRute()
+    + ubahRute()
+    + hapusRute()
+}
+
+class Bis {
+    + id_bis 
+    + merk
+    + kapasitas
+    + plat
+
+    + tambahBis()
+    + hapusBis()
+    + ubahBis()
 }
 
 @enduml

@@ -1,28 +1,29 @@
 <?php
 session_start();
 
-require_once './system/auth.php';
+require 'system/user/user.php';
+require_once 'system/config/db.php';
+
+$db = Database::getConnect();
 
 // validasi jika sudah login langsung di direct
 if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'pelanggan') {
-    header('Location: user/dashboard.php');
+    header('Location: index.php');
     exit;
 } elseif (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
     header('Location: admin/dashboard.php');
     exit;
 }
 
-$error_msg = '';
-$error_msg = $_SESSION['daftar-sukses'];
-
-$login = new Auth();
+$message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $pass = $_POST['password'];
 
-    $login->loginUser($email, $pass);
-    $error_msg = $login->error;
+    $login = new User(email: $email, password: $pass);
+    $login->login($db);
+    $message = $login->message;
 }
 ?>
 
@@ -38,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <?php include './utils/auth_navbar.php'; ?>
+    <?php include 'utils/auth_navbar.php' ?>
 
     <!-- FORM LOGIN -->
     <div class="container-fluid-sm container-md mt-5">
@@ -51,7 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- notif pesan -->
                     <div class="d-flex justify-content-center">
-                        <p class="pt-2"><?= $error_msg ?></p>
+                        <?php if (isset($_SESSION['success'])) { ?>
+                            <span class="pt-2"><?= $_SESSION['success'] ?></span>
+                            <?php unset($_SESSION['success']); ?>
+                        <?php } else { ?>
+                            <span class="pt-2"><?= $message ?></span>
+                        <?php } ?>
                     </div>
 
                     <form action="" method="post" class="was-validated">
@@ -61,15 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="email" class="form-control" name="email" id="exampleInputEmail1" required>
                         </div>
                         <!-- password -->
-                        <div class="mb-2">
+                        <div class="mb-4">
                             <label for="exampleInputPassword" class="form-label">Password:</label>
                             <input type="password" class="form-control" name="password" id="exampleInputPassword" required>
-                        </div>
-                        <!-- remember me -->
-                        <div class="mb-4">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                            </label>
                         </div>
                         <!-- button -->
                         <div class="mb-4">

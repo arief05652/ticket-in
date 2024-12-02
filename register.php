@@ -1,20 +1,21 @@
 <?php
 session_start();
 
-require_once './system/auth.php';
+require 'system/user/user.php';
+require_once 'system/config/db.php';
 
-$error_msg = '';
-
-$register = new Auth();
+$db = Database::getConnect();
 
 // validasi jika sudah login langsung di direct
 if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'pelanggan') {
-    header('Location: user/dashboard.php');
+    header('Location: index.php');
     exit;
 } elseif (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
     header('Location: admin/dashboard.php');
     exit;
 }
+
+$message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // ambil dari form
@@ -25,10 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $re_type = $_POST['re-type'];
 
     if ($password !== $re_type) {
-        $error_msg = "Harap masukan password dengan benar";
+        $message = "Harap masukan password dengan benar";
     } else {
-        $register->registUser($email, $nama_depan, $nama_belakang, $password);
-        $error_msg = $register->error;
+        $register = new User(
+                email: $email, 
+                password: $password, 
+                nama_depan: $nama_depan, 
+                nama_belakang: $nama_belakang
+            );
+        $register->register($db);
+        $message = $register->message;
     }
 }
 ?>
@@ -45,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <?php include './utils/auth_navbar.php'; ?>
+    <?php include 'utils/auth_navbar.php'; ?>
 
     <!-- FORM REGISTER -->
     <div class="container-fluid-sm container-md mt-5">
@@ -58,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- notif pesan -->
                     <div class="d-flex justify-content-center">
-                        <p class="pt-2"><?= $error_msg ?></p>
+                        <span class="pt-2"><?= $message ?></span>
                     </div>
 
                     <form action="" method="post" class="was-validated">
