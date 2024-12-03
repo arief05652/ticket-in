@@ -62,9 +62,3 @@ class Rute {
         }
     }
 }
-
-// $db = Database::getConnect();
-
-// $rute = new Rute($db);
-// $data = $rute->getRuteById(4);
-// print_r($data);

@@ -44,46 +44,6 @@ $total_user = $view->getTotalUser();
         </div>
     </div>
 
-    <!-- container -->
-    <div class="container d-flex rounded p-3">
-        <div class="row w-100 gap-sm-3 gap-md-0 justify-content-betwenn">
-            <!-- jumlah user -->
-            <div class="col-sm-12 col-md-4">
-                <div class="d-flex flex-column align-items-center rounded shadow py-2">
-                    <i class="material-symbols-outlined mb-2" style="font-size: 50px">
-                        person
-                    </i>
-                    <div class="text-center fw-bold  mb-1"><?= htmlspecialchars($total_user) ?></div>
-                    <div class="text-center fw-bold">Total user</div>
-                </div>
-            </div>
-            <!-- jumlah tiket terjual -->
-            <div class="col-sm-12 col-md-4">
-                <div class="d-flex flex-column align-items-center rounded shadow py-2">
-                    <i class="material-symbols-outlined  mb-2" style="font-size: 50px">
-                        book_online
-                    </i>
-                    <div class="text-center fw-bold  mb-1">Jumlah User</div>
-                    <div class="text-center fw-bold">Tiket Terjual</div>
-                </div>
-            </div>
-            <!-- jumlah pemasukan harian -->
-            <div class="col-sm-12 col-md-4">
-                <div class="d-flex flex-column align-items-center rounded shadow py-2">
-                    <i class="material-symbols-outlined  mb-2" style="font-size: 50px">
-                        paid
-                    </i>
-                    <div class="text-center fw-bold  mb-1">Rp. Jumlah User</div>
-                    <div class="text-center fw-bold">Pemasukan Harian</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <hr>
-    </div>
-
     <!-- apps container -->
     <div class="container rounded p-3">
         <h4 class="mb-3 fw-bold">Apps menu</h4>
