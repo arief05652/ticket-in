@@ -1,16 +1,29 @@
 <?php
 session_start();
 
-require_once './system/auth.php';
+require 'system/user/user.php';
+require_once 'system/config/db.php';
 
-$error_msg = '';
+$db = Database::getConnect();
+
+// validasi jika sudah login langsung di direct
+if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'pelanggan') {
+    header('Location: index.php');
+    exit;
+} elseif (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
+    header('Location: admin/dashboard.php');
+    exit;
+}
+
+$message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $pass = $_POST['password'];
 
-    Auth::loginUser($email, $pass);
-    $error_msg = Auth::$error;
+    $login = new User(email: $email, password: $pass);
+    $login->login($db);
+    $message = $login->message;
 }
 ?>
 
@@ -26,23 +39,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <!-- <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.php">Ticket-In</a>
-        </div>
-    </nav> -->
+    <?php include 'utils/auth_navbar.php' ?>
 
     <!-- FORM LOGIN -->
     <div class="container-fluid-sm container-md mt-5">
         <div class="d-flex justify-content-center px-sm-0 px-lg-5 py-5">
-            <div class="w-50 rounded shadow-lg px-sm-2 px-md-3 py-sm-0 py-md-1 px-lg-5">
+            <div class="w-50 border rounded shadow-lg px-sm-2 px-md-3 py-sm-0 py-md-1 px-lg-5">
                 <div class="d-flex flex-column">
                     <div class="lead text-center pb-3 pt-3">
                         Login | Ticket-In
                     </div>
 
-                    <!-- error msg -->
-                    <p><?= $error_msg ?></p>
+                    <!-- notif pesan -->
+                    <div class="d-flex justify-content-center">
+                        <?php if (isset($_SESSION['success'])) { ?>
+                            <span class="pt-2"><?= $_SESSION['success'] ?></span>
+                            <?php unset($_SESSION['success']); ?>
+                        <?php } else { ?>
+                            <span class="pt-2"><?= $message ?></span>
+                        <?php } ?>
+                    </div>
 
                     <form action="" method="post" class="was-validated">
                         <!-- email -->
@@ -51,15 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="email" class="form-control" name="email" id="exampleInputEmail1" required>
                         </div>
                         <!-- password -->
-                        <div class="mb-2">
+                        <div class="mb-4">
                             <label for="exampleInputPassword" class="form-label">Password:</label>
                             <input type="password" class="form-control" name="password" id="exampleInputPassword" required>
-                        </div>
-                        <!-- remember me -->
-                        <div class="mb-4">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                            </label>
                         </div>
                         <!-- button -->
                         <div class="mb-4">
