@@ -14,13 +14,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema project_db
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `project_db` DEFAULT CHARACTER SET utf8 ;
-USE `project_db` ;
+CREATE SCHEMA IF NOT EXISTS `gdeuqhlz_project_db` DEFAULT CHARACTER SET utf8 ;
+USE `gdeuqhlz_project_db` ;
 
 -- -----------------------------------------------------
 -- Table `project_db`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`users` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`users` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
@@ -36,7 +36,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`bis`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`bis` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`bis` (
   `bis_id` INT NOT NULL AUTO_INCREMENT,
   `merk` VARCHAR(20) NOT NULL,
   `kapasitas` INT NOT NULL,
@@ -49,7 +49,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`rute`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`rute` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`rute` (
   `rute_id` INT NOT NULL AUTO_INCREMENT,
   `tujuan` VARCHAR(45) NOT NULL,
   `titik_penjemputan` TEXT NOT NULL,
@@ -61,7 +61,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`jadwal`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`jadwal` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`jadwal` (
   `jadwal_id` INT NOT NULL AUTO_INCREMENT,
   `rute_id` INT NOT NULL,
   `bis_id` INT NOT NULL,
@@ -86,7 +86,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`tiket`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`tiket` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`tiket` (
   `tiket_id` INT NOT NULL AUTO_INCREMENT,
   `jadwal_id` INT NOT NULL,
   `harga` INT NOT NULL,
@@ -105,7 +105,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`pesanan`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`pesanan` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`pesanan` (
   `pesanan_id` INT NOT NULL AUTO_INCREMENT,
   `tiket_id` INT NOT NULL,
   `user_id` INT NOT NULL,
@@ -130,7 +130,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`balance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`balance` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`balance` (
   `balance_id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `balance` DECIMAL(10,2) NULL,
@@ -147,7 +147,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`user_pesanan`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`user_pesanan` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`user_pesanan` (
   `up_id` INT NOT NULL AUTO_INCREMENT,
   `pesanan_id` INT NOT NULL,
   `status` ENUM('berhasil', 'cancel') NULL DEFAULT 'berhasil',
@@ -164,7 +164,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`topup_balance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`topup_balance` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`topup_balance` (
   `tb_id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `balance_id` INT NOT NULL,
@@ -189,7 +189,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`history_topup`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`history_topup` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`history_topup` (
   `ht_id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `amount` DECIMAL(10,2) NOT NULL,
@@ -208,7 +208,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `project_db`.`status_topup`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`status_topup` (
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`status_topup` (
   `st_id` INT NOT NULL AUTO_INCREMENT,
   `tb_id` INT NOT NULL,
   `status` ENUM('cancel', 'proses', 'berhasil', 'tolak') NULL DEFAULT 'proses',
@@ -221,23 +221,23 @@ CREATE TABLE IF NOT EXISTS `project_db`.`status_topup` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-USE `project_db` ;
+USE `gdeuqhlz_project_db` ;
 
 -- -----------------------------------------------------
 -- Placeholder table for view `project_db`.`cek_balance_user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`cek_balance_user` (`user_id` INT, `email` INT, `nama_lengkap` INT, `balance` INT);
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`cek_balance_user` (`user_id` INT, `email` INT, `nama_lengkap` INT, `balance` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `project_db`.`pesanan_tiket_user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_db`.`pesanan_tiket_user` (`user_id` INT, `email` INT, `tujuan` INT, `keberangkatan` INT, `harga_satuan` INT, `jumlah_tiket` INT, `total_harga` INT, `status_pesanan` INT, `pemesanan` INT);
+CREATE TABLE IF NOT EXISTS `gdeuqhlz_project_db`.`pesanan_tiket_user` (`user_id` INT, `email` INT, `tujuan` INT, `keberangkatan` INT, `harga_satuan` INT, `jumlah_tiket` INT, `total_harga` INT, `status_pesanan` INT, `pemesanan` INT);
 
 -- -----------------------------------------------------
 -- View `project_db`.`cek_balance_user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `project_db`.`cek_balance_user`;
-USE `project_db`;
+DROP TABLE IF EXISTS `gdeuqhlz_project_db`.`cek_balance_user`;
+USE `gdeuqhlz_project_db`;
 CREATE  OR REPLACE VIEW `cek_balance_user` AS
 SELECT
 	us.user_id as user_id,
@@ -250,8 +250,8 @@ JOIN balance bl ON bl.user_id = us.user_id;
 -- -----------------------------------------------------
 -- View `project_db`.`pesanan_tiket_user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `project_db`.`pesanan_tiket_user`;
-USE `project_db`;
+DROP TABLE IF EXISTS `gdeuqhlz_project_db`.`pesanan_tiket_user`;
+USE `gdeuqhlz_project_db`;
 CREATE  OR REPLACE VIEW `pesanan_tiket_user` AS
 SELECT
 	u.user_id as user_id,
@@ -269,57 +269,57 @@ JOIN user_pesanan up ON p.pesanan_id = up.pesanan_id
 JOIN tiket t ON t.tiket_id = p.tiket_id
 JOIN jadwal j ON j.jadwal_id = t.jadwal_id
 JOIN rute r ON r.rute_id = j.rute_id;
-USE `project_db`;
+USE `gdeuqhlz_project_db`;
 
 DELIMITER $$
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`users_AFTER_INSERT_1` AFTER INSERT ON `users` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`users_AFTER_INSERT_1` AFTER INSERT ON `users` FOR EACH ROW
 BEGIN
 	INSERT INTO balance (user_id, balance)
     VALUES (NEW.user_id, 0);
 END$$
 
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`jadwal_AFTER_INSERT_1` AFTER INSERT ON `jadwal` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`jadwal_AFTER_INSERT_1` AFTER INSERT ON `jadwal` FOR EACH ROW
 BEGIN
 	UPDATE bis 
     SET status = 'aktif'
     WHERE bis_id = NEW.bis_id;
 END$$
 
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`jadwal_AFTER_DELETE_1` AFTER DELETE ON `jadwal` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`jadwal_AFTER_DELETE_1` AFTER DELETE ON `jadwal` FOR EACH ROW
 BEGIN
 	UPDATE bis
     SET status = 'tidak'
     WHERE bis_id = OLD.bis_id;
 END$$
 
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`tiket_AFTER_INSERT_1` AFTER INSERT ON `tiket` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`tiket_AFTER_INSERT_1` AFTER INSERT ON `tiket` FOR EACH ROW
 BEGIN
 	UPDATE jadwal 
     SET status = 'aktif'
     WHERE jadwal_id = NEW.jadwal_id;
 END$$
 
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`tiket_AFTER_DELETE_1` AFTER DELETE ON `tiket` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`tiket_AFTER_DELETE_1` AFTER DELETE ON `tiket` FOR EACH ROW
 BEGIN
 	UPDATE jadwal 
     SET status = 'tidak'
     WHERE jadwal_id = OLD.jadwal_id;
 END$$
 
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`pesanan_AFTER_INSERT_1` AFTER INSERT ON `pesanan` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`pesanan_AFTER_INSERT_1` AFTER INSERT ON `pesanan` FOR EACH ROW
 BEGIN
     INSERT INTO user_pesanan (pesanan_id, status)
     VALUES (NEW.pesanan_id, 'proses');
 END$$
 
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`user_pesanan_AFTER_UPDATE_1` AFTER UPDATE ON `user_pesanan` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`user_pesanan_AFTER_UPDATE_1` AFTER UPDATE ON `user_pesanan` FOR EACH ROW
 BEGIN 
 	DECLARE user_id INT; 
     DECLARE tiket_id INT;
@@ -369,15 +369,15 @@ BEGIN
 	END IF;
 END$$
 
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`topup_balance_AFTER_INSERT_1` AFTER INSERT ON `topup_balance` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`topup_balance_AFTER_INSERT_1` AFTER INSERT ON `topup_balance` FOR EACH ROW
 BEGIN
 	INSERT INTO status_topup (tb_id, status)
     VALUES (NEW.tb_id, 'proses');
 END$$
 
-USE `project_db`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `project_db`.`status_topup_AFTER_UPDATE_1` AFTER UPDATE ON `status_topup` FOR EACH ROW
+USE `gdeuqhlz_project_db`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `gdeuqhlz_project_db`.`status_topup_AFTER_UPDATE_1` AFTER UPDATE ON `status_topup` FOR EACH ROW
 BEGIN
     -- user id & balance terakhir --
 	DECLARE user_id INT;
