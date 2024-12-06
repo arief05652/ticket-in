@@ -1,6 +1,6 @@
 <?php
 class Balance {
-    protected $balance;
+    public $balance;
 
     public function __construct($db, $user_id) {
         try {

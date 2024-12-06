@@ -1,6 +1,8 @@
 <?php
 session_start();
+
 require 'system/user/user.php';
+require 'system/user/pesanan.php';
 require_once 'system/config/db.php';
 
 $db = Database::getConnect();
@@ -14,6 +16,11 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $profile = new UserProfile($db);
+$pesanan = new Pesanan($db);
+
+$result = $pesanan->lihatPesananProfile($_SESSION['user_id']);
+
+$i = 1;
 
 // update profile
 if (isset($_POST['save-update'])) {
@@ -95,20 +102,36 @@ if (isset($_POST['save-update'])) {
 
     <!-- pesanan & order -->
     <section style="margin-top: 60px;">
-        <div class="container shadow rounded p-sm-2 p-md-3">
-            <h2 class="text-center mb-4">Order Tiket</h2>
+        <div class="container-fluid-sm container-md shadow rounded p-sm-2 p-md-3">
+            <h2 class="text-center mb-4">Tiket anda</h2>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th scope="col">No</th>
+                        <th scope="col">Tujuan</th>
+                        <th scope="col">Plat</th>
+                        <th scope="col">Harga satuan</th>
+                        <th scope="col">Jumlah tiket</th>
+                        <th scope="col">Total harga</th>
                         <th scope="col">Tanggal</th>
-                        <th scope="col">Kode Transaksi</th>
-                        <th scope="col">Total Harga</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- your order data here -->
+                    <?php foreach($result as $data): ?>
+                        <tr>
+                            <td><?= $i++; ?></td>
+                            <td><?= $data['tujuan'] ?></td>
+                            <td><?= $data['plat'] ?></td>
+                            <td>Rp. <?= number_format($data['harga'], 0, ",", ".") ?></td>
+                            <td><?= $data['jumlah_tiket'] ?></td>
+                            <td>Rp. <?= number_format($data['total_harga'], 0, ",", ".") ?></td>
+                            <td><?= $data['berangkat'] ?></td>
+                            <td>
+                                <a href="detail_tiket.php?id=<?= $data['pesanan_id']?>" class="btn btn-danger">Detail</a>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
                 </tbody>
             </table>
         </div>

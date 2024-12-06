@@ -1,5 +1,5 @@
 <?php
-require './system/user/balance_system.php';
+require_once './system/user/topup_system.php';
 require_once './system/config/db.php';
 
 $db = Database::getConnect();

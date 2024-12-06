@@ -1,11 +1,20 @@
 <?php
 session_start();
 
+require 'system/config/db.php';
+require_once 'system/admin/tiket.php';
+
 // validasi jika sudah login langsung di direct
 if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
     header('Location: admin/dashboard.php');
     exit;
 }
+
+$db = Database::getConnect();
+
+$rute = new Tiket($db);
+
+$lihat_tujuan = $rute->showTiketPublic();
 
 ?>
 
@@ -37,59 +46,64 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
 
     <!-- jumbotron -->
     <section style="margin-top: 57px; background-color: #78B3CE;">
-        <div class="jumbotron-height container-fluid-lg container-sm py-sm-2 px-sm-3 py-md-3 px-md-5 py-lg-5 px-lg-5">
-            <div class="row align-items-center h-100">
-
-                <!-- slogan -->
-                <div class="h-75 slogan-hidden col-sm-12 col-lg-6">
-                    <div class="pt-md-4 px-5">
-                        <div class="text-center">
-                            <h3>Penuhi kebutuhan liburan anda dengan <span class="fw-bold">Ticket-In</span> </h3>
-                        </div>
+        <div class="container-fluid-lg container-sm pt-sm-2 px-sm-3 pt-md-3 px-md-5 pt-lg-5 px-lg-5">
+            <div class="row align-items-center h-100 ps-sm-0">
+                <!-- kata kata hari ini 🖐️😮 -->
+                <div class="col-sm-12 col-md-6 d-sm-none d-md-flex">
+                    <div class="px-5">
+                        <h3>Penuhi kebutuhan liburan anda dengan <span class="fw-bold">Ticket-In</span></h3>
                     </div>
                 </div>
 
-                <!-- search -->
-                <div class="col-sm-12 col-lg-6">
-                    <div class="shadow-lg bg-light-subtle rounded border p-2">
-                        <div class="d-flex flex-column">
-
-                            <!-- text ticket -->
-                            <div class="text-center pt-1 rounded mb-3" style="background-color: #B3C8CF;">
-                                <h5>Cari ticket disini</h5>
-                            </div>
-
-                            <form action="" method="post">
-
-                                <!-- input group -->
-                                <div class="d-flex flex-column rounded justify-content-around mb-sm-3" style="height: 150px;">
-                                    <!-- kota asal -->
-                                    <div class="px-5">
-                                        <input type="email" class="form-control" placeholder="Kota asal" name="asal">
-                                    </div>
-                                    <!-- kota tujuan -->
-                                    <div class="px-5">
-                                        <input type="email" class="form-control" placeholder="Kota tujuan" name="tujuan">
-                                    </div>
-                                    <!-- tanggal -->
-                                    <div class="px-5">
-                                        <input type="date" class="form-control" name="tanggal">
-                                    </div>
-                                </div>
-
-                                <!-- button -->
-                                <div class="d-flex justify-content-center rounded px-5 py-2 mb-sm-3">
-                                    <button class="btn btn-success w-100" type="submit" name="cari-ticket">Cari tiket</button>
-                                </div>
-
-                            </form>
-
-                        </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="d-flex flex-column align-items-center">
+                        <img src="public/assets/bus.png" class="image-width">
                     </div>
                 </div>
             </div>
         </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#0099ff" fill-opacity="1" d="M0,64L48,90.7C96,117,192,171,288,170.7C384,171,480,117,576,106.7C672,96,768,128,864,154.7C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
     </section>
+
+    <section class="mb-5" style="background-color: #0099ff;">
+        <div class="container pb-5">
+            <div class="row">
+                <div class="col-xxl-12">
+                    <!-- list ketersediaan ticket -->
+                    <div class="rounded bg-light-subtle d-flex flex-column align-items-center mb-4">
+                        <h2>Tickets Available</h2>
+                    </div>
+                </div>
+
+
+                <div class="overflow-x-auto">
+                    <div class="d-flex">
+                        <?php foreach ($lihat_tujuan as $data): ?>
+                            <div class="col d-flex justify-content-around">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center"><?= $data['tujuan'] ?></h5>
+                                        <p class="card-text lead">
+                                            Rp. <?= number_format($data['harga'], 0, ",", ".") ?><br>
+                                            Stok: <?= $data['stok'] ?><br>
+                                            <?= $data['jam_berangkat'] ?>
+                                        </p>
+                                        <a class="btn btn-primary w-100" href="detail.php?id=<?= $data['tiket_id'] ?>" role="button">Pesan tiket</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+
 
     <!-- service -->
     <!-- <section>

@@ -30,7 +30,7 @@ if (isset($_POST['tambah-tiket'])) {
 // hapus jadwal
 if (isset($_POST['hapus-tiket'])) {
     $id = $_POST['id_rute'];
-    $jadwal->hapus_jadwal($id);
+    $tiket->hapusTiket($id);
 }
 
 // // ubah jadwal 
@@ -81,6 +81,7 @@ if (isset($_POST['hapus-tiket'])) {
                     <tr>
                         <th scope="col">No</th>
                         <th scope="col">Tujuan</th>
+                        <th scope="col">Plat</th>
                         <th scope="col">Jam berangkat</th>
                         <th scope="col">Harga</th>
                         <th scope="col">Stok</th>
@@ -93,6 +94,7 @@ if (isset($_POST['hapus-tiket'])) {
                         <tr>
                             <td><?= $i++ ?></td>
                             <td><?= htmlspecialchars($data['tujuan']); ?></td>
+                            <td><?= htmlspecialchars($data['plat']); ?></td>
                             <td><?= htmlspecialchars($data['jam_berangkat']); ?></td>
                             <td>Rp. <?= number_format($data['harga'], 0, ",", "."); ?></td>
                             <td><?= htmlspecialchars($data['stok']); ?></td>
