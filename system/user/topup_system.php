@@ -8,11 +8,11 @@ class Balance {
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
 
-            $data = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $this->balance = $data['balance'];
 
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             echo "Error: ". $e->getMessage();
         }
     }
@@ -20,5 +20,9 @@ class Balance {
     public function getBalance() {
         $balance = $this->balance;
         return number_format($balance, 0, ",", ".");
+    }
+
+    public function getBal() {
+        return $this->balance;
     }
 }

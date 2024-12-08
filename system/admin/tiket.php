@@ -9,29 +9,7 @@ class Tiket
         $this->db = $db;
     }
 
-    public function getJadwal() {
-        try {
-            $stmt = $this->db->prepare(
-                "SELECT 
-                    j.jadwal_id as jadwal_id,
-                    r.tujuan as tujuan,
-                    b.plat_nomor as plat,
-                    j.jam_berangkat as berangkat
-                 FROM jadwal j
-                 JOIN rute r ON r.rute_id = j.rute_id
-                 JOIN bis b ON b.bis_id = j.bis_id
-                 WHERE j.status = 'tidak'
-                "
-            );
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $data;
-        } catch (Exception $e) {
-            echo "Kesalahan: ". $e->getMessage();
-        }
-    }
-
-    public function showTiketUser($tiket_id) {
+    public function showTiketDetail($tiket_id) {
         /**
          * fetch informasi tiket by tiket_id
          */
@@ -99,7 +77,7 @@ class Tiket
                 FROM tiket t
                 JOIN jadwal j ON j.jadwal_id = t.jadwal_id
                 JOIN rute r ON r.rute_id = j.rute_id
-                WHERE t.status = 'public'
+                WHERE t.status = 'public' AND stok > 0
                 LIMIT 3"
             );
             $stmt->execute();
@@ -110,34 +88,56 @@ class Tiket
         }
     }
 
-    public function hapusTiket($id)
-    {
+    public function tambahTiket($id, $harga, $stok) {
         try {
             $stmt = $this->db->prepare(
-                "DELETE FROM tiket WHERE tiket_id = :tiket_id"
-            );
-            $stmt->bindParam(':tiket_id', $id);
-            $stmt->execute();
-            header('Location:../admin/tiket.php');
-        } catch (PDOException $e) {
-            echo "Kesalahan: " . $e->getMessage();
-        }
-    }
-
-    public function tambahTiket($id, $harga, $stok, $status) {
-        try {
-            $stmt = $this->db->prepare(
-                "INSERT INTO tiket (jadwal_id, harga, stok, status)
-                VALUES (:jadwal_id, :harga, :stok, :status)"
+                "INSERT INTO tiket (jadwal_id, harga, stok)
+                VALUES (:jadwal_id, :harga, :stok)"
             );
             $stmt->bindParam(':jadwal_id', $id);
             $stmt->bindParam(':harga', $harga); 
             $stmt->bindParam(':stok', $stok);
-            $stmt->bindParam(':status', $status);
             $stmt->execute();
             header('Location:../admin/tiket.php');
         } catch (PDOException $e) {
             echo "Kesalahan: ". $e->getMessage();
         }
     }
+
+    public function updateStatus($tiket_id, $status) {
+        try {
+            $stmt = $this->db->prepare(
+                "UPDATE tiket
+                SET status = :status
+                WHERE tiket_id = :tiket_id"
+            );
+            $stmt->bindParam(':tiket_id', $tiket_id);
+            $stmt->bindParam(':status', $status);
+            $stmt->execute();
+
+            header('Location:../admin/tiket.php');
+        } catch (PDOException $e) {
+            echo "Kesalahan: ". $e->getMessage();
+        }
+    }
+
+    public function updateTiket($id, $jadwal_id, $harga, $stok) {
+        try {
+            $stmt = $this->db->prepare(
+                "UPDATE tiket
+                SET jadwal_id = :jadwal_id, harga = :harga, stok = :stok
+                WHERE tiket_id = :tiket_id"
+            );
+            $stmt->bindParam(':tiket_id', $id);
+            $stmt->bindParam(':jadwal_id', $jadwal_id);
+            $stmt->bindParam(':harga', $harga);
+            $stmt->bindParam(':stok', $stok);
+            $stmt->execute();
+            header('Location:../admin/tiket.php');
+        } catch (PDOException $e) {
+            echo "Kesalahan: ". $e->getMessage();
+        }
+    }
+
+    
 }

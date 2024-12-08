@@ -3,19 +3,23 @@ session_start();
 
 require '../system/config/db.php';
 require_once '../system/admin/jadwal.php';
+require_once '../system/admin/rute.php';
+require_once '../system/admin/bus.php';
 
 $db = Database::getConnect();
 
 $jadwal = new Jadwal($db);
+$rute = new Rute($db);
+$bus = new Bis($db);
 
 $i = 1;
 
 // get all jadwal
 $show_all_jadwal = $jadwal->lihatJadwal();
 // get rute tujuan
-$tujuan = $jadwal->lihatTujuan();
+$tujuan = $rute->lihatRute();
 // get bis
-$bis = $jadwal->lihatMerk();
+$bis = $bus->lihatMerk();
 
 // tambah jadwal
 if (isset($_POST['tambah-jadwal'])) {
@@ -24,12 +28,6 @@ if (isset($_POST['tambah-jadwal'])) {
     $jam_berangkat = $_POST['jam_berangkat'];
 
     $jadwal->tambahJadwal(id_rute: $id_rute, id_bis: $id_bis, jam_berangkat: $jam_berangkat);
-}
-
-// hapus jadwal
-if (isset($_POST['hapus-jadwal'])) {
-    $id = $_POST['id_rute'];
-    $jadwal->hapusJadwal($id);
 }
 
 // ubah jadwal 
@@ -98,9 +96,6 @@ if (isset($_POST['edit-jadwal'])) {
                             <td><?= htmlspecialchars($data['jam_berangkat']); ?></td>
                             <td><?= htmlspecialchars($data['status']) ?></td>
                             <td>
-                                <button type="button" class="btn btn-danger mb-sm-1 mb-md-0" data-bs-toggle="modal" data-bs-target="#hapusModal" onclick="getRuteId(<?= $data['jadwal_id'] ?>)">
-                                    <i class="material-symbols-outlined">delete</i>
-                                </button>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" onclick="getId(<?= $data['jadwal_id'] ?>)">
                                     <i class="material-symbols-outlined">edit</i>
                                 </button>
@@ -109,28 +104,6 @@ if (isset($_POST['edit-jadwal'])) {
                         <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <!-- modal hapus -->
-    <div class="modal fade" id="hapusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus bis</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="" method="post">
-                    <div class="modal-body">
-                        <p>Apakah anda yakin ingin menghapus jadwal ini?</p>
-                        <input type="hidden" name="id_rute" id="id_rute">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" name="hapus-jadwal" class="btn btn-danger">Ya Hapus</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 

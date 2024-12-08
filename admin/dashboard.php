@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-require '../system/config/db.php';
-require_once '../system/user/user.php';
-
 // validasi jika belum login
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../index.php');
@@ -12,14 +9,6 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: ../index.php');
     exit;
 }
-
-$db = Database::getConnect();
-
-// dashboard
-$view = new UserProfile($db);
-
-// get data
-$total_user = $view->getTotalUser();
 
 ?>
 

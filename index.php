@@ -3,6 +3,8 @@ session_start();
 
 require 'system/config/db.php';
 require_once 'system/admin/tiket.php';
+require_once 'system/user/pesanan.php';
+require_once 'system/user/topup_system.php';
 
 // validasi jika sudah login langsung di direct
 if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
@@ -13,8 +15,30 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
 $db = Database::getConnect();
 
 $rute = new Tiket($db);
-
+$pesanan = new Pesanan($db);
 $lihat_tujuan = $rute->showTiketPublic();
+
+$message = "";
+
+// beli tiket
+if (isset($_POST['beli-tiket'])) {
+    $balance = new Balance($db, $_SESSION['user_id']);
+    $balance = (float) $balance->getBal();
+
+    $user_id = $_SESSION['user_id'];
+    $tiket_id = (int) $_POST['id_rute_edit'];
+    $jumlah = (int) $_POST['jumlah_tiket'];
+
+    $harga = $rute->showTiketDetail($tiket_id);
+
+    $total = $harga['harga'] * $jumlah;
+
+    if ($balance >= $total) {
+        $pesanan->beliTiket($user_id, $tiket_id, $jumlah, $total);
+    } else {
+        $message = "<script>alert('Uang anda tidak cukup')</script>";
+    }
+}
 
 ?>
 
@@ -43,6 +67,8 @@ $lihat_tujuan = $rute->showTiketPublic();
     <?php } else { ?>
         <?php include 'utils/navbar_user.php' ?>
     <?php } ?>
+        
+    <?=  $message ?>
 
     <!-- jumbotron -->
     <section style="margin-top: 57px; background-color: #78B3CE;">
@@ -70,14 +96,6 @@ $lihat_tujuan = $rute->showTiketPublic();
     <section class="mb-5" style="background-color: #0099ff;">
         <div class="container pb-5">
             <div class="row">
-                <div class="col-xxl-12">
-                    <!-- list ketersediaan ticket -->
-                    <div class="rounded bg-light-subtle d-flex flex-column align-items-center mb-4">
-                        <h2>Tickets Available</h2>
-                    </div>
-                </div>
-
-
                 <div class="overflow-x-auto">
                     <div class="d-flex">
                         <?php foreach ($lihat_tujuan as $data): ?>
@@ -90,55 +108,46 @@ $lihat_tujuan = $rute->showTiketPublic();
                                             Stok: <?= $data['stok'] ?><br>
                                             <?= $data['jam_berangkat'] ?>
                                         </p>
-                                        <a class="btn btn-primary w-100" href="detail.php?id=<?= $data['tiket_id'] ?>" role="button">Pesan tiket</a>
+                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#beli-tiket" onclick="getId(<?= $data['tiket_id'] ?>)">
+                                            Beli tiket
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </section>
 
-
-    <!-- service -->
-    <!-- <section>
-        <div class="service-height container-fluid-sm container-md py-3">
-            <div class="row">
-
-                <div class="col-sm-12 col-md-6 mb-sm-2">
-                    <div class="border shadow-lg rounded py-4">
-                        <div class="d-sm-flex">
-                            <div class="w-50 lead align-self-center text-center">
-                                Pembelian secara online
-                            </div>
-                            <div class="w-50 d-flex justify-content-center">
-                                <img src="public/assets/costumer-service.png" width="50%" alt="">
-                            </div>
+    <!-- modal beli tiket -->
+    <div class="modal fade" id="beli-tiket" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Detail Tiket</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="id_rute_edit" id="id_rute_edit">
+                        <label for="exampleFormControlInput1" class="form-label">Jumlah tiket</label>
+                        <input type="text" class="form-control mb-3" name="jumlah_tiket" id="exampleFormControlInput1">
+                        <div class="modal-footer">
+                            <button type="submit" name="beli-tiket" class="btn btn-success">Beli</button>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-sm-12 col-md-6">
-                    <div class="border shadow-lg rounded py-4">
-                        <div class="d-sm-flex">
-                            <div class="w-50 lead align-self-center text-center">
-                                Pembelian secara online
-                            </div>
-                            <div class="w-50 d-flex justify-content-center">
-                                <img src="public/assets/costumer-service.png" width="50%" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                </form>
             </div>
         </div>
-    </section> -->
+    </div>
+
+    <script>
+        function getId(id) {
+            document.getElementById('id_rute_edit').value = id;
+        }
+    </script>
 
 
     <?php include 'utils/bottom.php' ?>

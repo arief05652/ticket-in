@@ -3,47 +3,50 @@ session_start();
 
 require '../system/config/db.php';
 require_once '../system/admin/tiket.php';
+require_once '../system/admin/jadwal.php';
+require_once '../system/admin/bus.php';
 
 $db = Database::getConnect();
 
 $tiket = new Tiket($db);
+$jadwal = new Jadwal($db);
 
 $i = 1;
 
 // get all tiket
 $show_all_tiket = $tiket->lihatTiket();
 // get jadwal
-$jadwal = $tiket->getJadwal();
-// // get bis
-// $bis = $jadwal->lihat_bis_merk_kapasitas();
+$jadwal = $jadwal->lihatJadwal();
 
 // tambah jadwal
 if (isset($_POST['tambah-tiket'])) {
+    $jadwal_id = $_POST['tujuan'];
+    $harga = $_POST['harga'];
+    $stok = $_POST['stok'];
+
+    $tiket->tambahTiket($jadwal_id, $harga, $stok);
+}
+
+// update jadwal
+if (isset($_POST['ubah-visibility'])) {
+    $id = $_POST['id_rute'];
+    $status = $_POST['status'];
+
+    $tiket->updateStatus($id, $status);
+}
+
+// ubah tiket 
+if (isset($_POST['edit-tiket'])) {
+    $id = $_POST['id_rute_edit'];
     $jadwal_id = $_POST['jadwal'];
     $harga = $_POST['harga'];
     $stok = $_POST['stok'];
-    $status = $_POST['status'];
 
-    $tiket->tambahTiket($jadwal_id, $harga, $stok, $status);
+    $tiket->updateTiket($id, $jadwal_id, $harga, $stok);
 }
-
-// hapus jadwal
-if (isset($_POST['hapus-tiket'])) {
-    $id = $_POST['id_rute'];
-    $tiket->hapusTiket($id);
-}
-
-// // ubah jadwal 
-// if (isset($_POST['edit-jadwal'])) {
-//     $id = $_POST['id_rute_edit'];
-//     $id_rute = $_POST['tujuan'];
-//     $id_bis = $_POST['bis'];
-//     $jam_berangkat = $_POST['jam_berangkat'];
-
-//     $jadwal->ubah_jadwal(id: $id, id_rute: $id_rute, id_bis: $id_bis, jam_berangkat: $jam_berangkat);
-// }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -100,10 +103,10 @@ if (isset($_POST['hapus-tiket'])) {
                             <td><?= htmlspecialchars($data['stok']); ?></td>
                             <td><?= htmlspecialchars($data['status']) ?></td>
                             <td>
-                                <button type="button" class="btn btn-danger mb-sm-1 mb-md-0" data-bs-toggle="modal" data-bs-target="#hapusModal" onclick="getRuteId(<?= $data['tiket_id'] ?>)">
-                                    <i class="material-symbols-outlined">delete</i>
+                                <button type="button" class="btn btn-success mb-sm-1 mb-md-0" data-bs-toggle="modal" data-bs-target="#statusModal" onclick="getRuteId(<?= $data['tiket_id'] ?>)">
+                                    <i class="material-symbols-outlined">visibility</i>
                                 </button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" onclick="getRuteId(<?= $data['tiket_id'] ?>)">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" onclick="getId(<?= $data['tiket_id'] ?>)">
                                     <i class="material-symbols-outlined">edit</i>
                                 </button>
                             </td>
@@ -114,8 +117,8 @@ if (isset($_POST['hapus-tiket'])) {
         </div>
     </div>
 
-    <!-- modal hapus -->
-    <div class="modal fade" id="hapusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- modal visibility -->
+    <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -124,12 +127,17 @@ if (isset($_POST['hapus-tiket'])) {
                 </div>
                 <form action="" method="post">
                     <div class="modal-body">
-                        <p>Apakah anda yakin ingin menghapus tiket ini?</p>
                         <input type="hidden" name="id_rute" id="id_rute">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" name="hapus-tiket" class="btn btn-danger">Ya Hapus</button>
+                        <div class="mb-3">
+                            <label class="form-label">Status:</label>
+                            <select class="form-select" name="status" required>
+                                <option value="draft">Draft</option>
+                                <option value="public">Public</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="ubah-visibility" class="btn btn-success">Update status</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -148,10 +156,10 @@ if (isset($_POST['hapus-tiket'])) {
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="merk" class="form-label">Jadwal:</label>
-                            <select class="form-select" name="jadwal" required>
+                            <select class="form-select" name="tujuan" required>
                                 <option value="">Pilih jadwal</option>
                                 <?php foreach ($jadwal as $data): ?>
-                                    <option value="<?= $data['jadwal_id'] ?>"><?= htmlspecialchars($data['tujuan']) ?> | <?= htmlspecialchars($data['plat']) ?> | <?= htmlspecialchars($data['berangkat']) ?> </option>
+                                    <option value="<?= $data['jadwal_id'] ?>"><?= htmlspecialchars($data['tujuan']) ?> | <?= htmlspecialchars($data['plat_nomor']) ?> | <?= htmlspecialchars($data['jam_berangkat']) ?> </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -163,13 +171,6 @@ if (isset($_POST['hapus-tiket'])) {
                             <label for="stok" class="form-label">Stok:</label>
                             <input type="text" name="stok" class="form-control" id="stok" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status:</label>
-                            <select class="form-select" name="status" required>
-                                <option value="draft">Draft</option>
-                                <option value="public">Public</option>
-                            </select>
-                        </div>
                         <div class="modal-footer">
                             <button type="submit" name="tambah-tiket" class="btn btn-success">Tambah</button>
                         </div>
@@ -180,7 +181,7 @@ if (isset($_POST['hapus-tiket'])) {
     </div>
 
     <!-- modal edit -->
-    <!-- <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -191,35 +192,30 @@ if (isset($_POST['hapus-tiket'])) {
                     <div class="modal-body">
                         <input type="hidden" name="id_rute_edit" id="id_rute_edit">
                         <div class="mb-3">
-                            <label for="merk" class="form-label">Tujuan:</label>
-                            <select class="form-select" name="tujuan" required>
-                                <option value="">Pilih rute tujuan</option>
-                                <?php foreach ($tujuan as $data): ?>
-                                    <option value="<?= $data['rute_id'] ?>"><?= htmlspecialchars($data['tujuan']) ?></option>
+                            <label for="merk" class="form-label">Jadwal:</label>
+                            <select class="form-select" name="jadwal" required>
+                                <option value="">Pilih jadwal</option>
+                                <?php foreach ($jadwal as $data): ?>
+                                    <option value="<?= $data['jadwal_id'] ?>"><?= htmlspecialchars($data['tujuan']) ?> | <?= htmlspecialchars($data['plat_nomor']) ?> | <?= htmlspecialchars($data['jam_berangkat']) ?> </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="kapasitas" class="form-label">Bis:</label>
-                            <select class="form-select" name="bis" required>
-                                <option value="">Pilih bis</option>
-                                <?php foreach ($bis as $data): ?>
-                                    <option value="<?= $data['bis_id'] ?>"><?= htmlspecialchars($data['merk']) ?> | <?= htmlspecialchars($data['plat_nomor']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                            <label for="harga" class="form-label">Harga:</label>
+                            <input type="text" name="harga" class="form-control" id="harga" required>
                         </div>
                         <div class="mb-3">
-                            <label for="plat" class="form-label">Jam berangkat:</label>
-                            <input type="datetime-local" id="plat" name="jam_berangkat" required>
+                            <label for="stok" class="form-label">Stok:</label>
+                            <input type="text" name="stok" class="form-control" id="stok" required>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" name="edit-jadwal" class="btn btn-success">Simpan Perubahan</button>
+                            <button type="submit" name="edit-tiket" class="btn btn-success">Ubah tiket</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <script>
         function getRuteId(id) {
