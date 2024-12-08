@@ -1,5 +1,4 @@
 <?php
-
 class Bis {
     private $db;
 
@@ -57,6 +56,18 @@ class Bis {
             header("Location:../../admin/bis.php");
         } catch (PDOException $e) {
             echo "Kesalahan: ". $e->getMessage();
+        }
+    }
+
+    public function lihatMerk()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT bis_id, merk, plat_nomor FROM bis");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        } catch (PDOException $e) {
+            echo "Kesalahan: " . $e->getMessage();
         }
     }
 }

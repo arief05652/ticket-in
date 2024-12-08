@@ -1,9 +1,9 @@
 <?php
 session_start();
 
+require 'system/config/db.php';
 require 'system/user/user.php';
 require 'system/user/pesanan.php';
-require_once 'system/config/db.php';
 
 $db = Database::getConnect();
 
@@ -31,7 +31,31 @@ if (isset($_POST['save-update'])) {
     $profile->ubahProfile($email, $nama_depan, $nama_belakang);
 }
 
+$message = "";
+// hapus pesanan
+if (isset($_POST['hapus-pesanan'])) {
+    $pesanan_id = (int) $_POST['id_tiket'];
+    $lihat_pesanan = $pesanan->lihatPesananById($pesanan_id);
+
+    $berangkat = $lihat_pesanan['berangkat'];
+
+    $berangkat_timestamp = strtotime($berangkat);
+    $current_timestamp = strtotime(date('Y-m-d H:i:s'));
+
+    if ($current_timestamp > $berangkat_timestamp) {
+        $message = "<script>alert('Tiket sudah melewati batas waktu')</script>";
+    } else {
+        $jumlah = $lihat_pesanan['jumlah_tiket'];
+        $tiket_id = $lihat_pesanan['tiket_id'];
+        $total = $lihat_pesanan['total_harga'];
+
+        $pesanan->batalkanPesanan($pesanan_id, $tiket_id, $_SESSION['user_id'], $jumlah, $total);
+    }
+}
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,6 +71,8 @@ if (isset($_POST['save-update'])) {
 
 <body>
     <?php include './utils/navbar_login.php' ?>
+
+    <?= $message ?>
 
     <!-- show profile -->
     <section style="margin-top: 60px;">
@@ -102,7 +128,7 @@ if (isset($_POST['save-update'])) {
 
     <!-- pesanan & order -->
     <section style="margin-top: 60px;">
-        <div class="container-fluid-sm container-md shadow rounded p-sm-2 p-md-3">
+        <div class="container-fluid shadow rounded p-sm-2 p-md-3">
             <h2 class="text-center mb-4">Tiket anda</h2>
             <table class="table table-striped table-hover">
                 <thead>
@@ -113,12 +139,13 @@ if (isset($_POST['save-update'])) {
                         <th scope="col">Harga satuan</th>
                         <th scope="col">Jumlah tiket</th>
                         <th scope="col">Total harga</th>
-                        <th scope="col">Tanggal</th>
+                        <th scope="col">Tanggal berangkat</th>
+                        <th scope="col">Pemesanan</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($result as $data): ?>
+                    <?php foreach ($result as $data): ?>
                         <tr>
                             <td><?= $i++; ?></td>
                             <td><?= $data['tujuan'] ?></td>
@@ -127,17 +154,47 @@ if (isset($_POST['save-update'])) {
                             <td><?= $data['jumlah_tiket'] ?></td>
                             <td>Rp. <?= number_format($data['total_harga'], 0, ",", ".") ?></td>
                             <td><?= $data['berangkat'] ?></td>
+                            <td><?= $data['pemesanan'] ?></td>
                             <td>
-                                <a href="detail_tiket.php?id=<?= $data['pesanan_id']?>" class="btn btn-danger">Detail</a>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batalTiket" onclick="getId(<?= $data['pesanan_id'] ?>)">
+                                    Batalkan
+                                </button>
                             </td>
                         </tr>
-                    <?php endforeach;?>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
     </section>
 
+    <!-- modal batalkan tiket -->
+    <div class="modal fade" id="batalTiket" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Batalkan tiket</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <p>Apakah anda yakin ingin membatalkan perjalanan ini?</p>
+                        <input type="hidden" name="id_tiket" id="id_tiket">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="hapus-pesanan" class="btn btn-danger">Batalkan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <?php include 'utils/bottom.php' ?>
 </body>
+
+<script>
+    function getId(id) {
+        document.getElementById("id_tiket").value = id;
+    }
+</script>
 
 </html>

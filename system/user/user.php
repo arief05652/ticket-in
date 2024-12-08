@@ -132,26 +132,4 @@ class UserProfile extends User {
             echo "Kesalahan: " . $e->getMessage();
         }
     }
-
-    public function lihatPesanan() {
-        try {
-            $stmt = $this->db->prepare("SELECT * FROM pesanan WHERE user_id = :user_id");
-            $stmt->bindParam(":user_id", $_SESSION['user_id']);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo "Kesalahan: ". $e->getMessage();
-        }
-    }
-
-    public function getTotalUser() {
-        try {
-            $stmt = $this->db->prepare("SELECT COUNT(*) AS total_user FROM users");
-            $stmt->execute();
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $data['total_user'];
-        } catch (PDOException $e) {
-            echo "Kesalahan: ". $e->getMessage();
-        }
-    }
 }

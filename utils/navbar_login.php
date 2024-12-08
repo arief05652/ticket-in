@@ -4,8 +4,11 @@ require_once './system/config/db.php';
 
 $db = Database::getConnect();
 
+
 $balance = new Balance(db: $db, user_id: $_SESSION['user_id']);
 $balance = $balance->getBalance();
+
+
 
 ?>
 
@@ -32,7 +35,7 @@ $balance = $balance->getBalance();
                     </i>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </nav>
@@ -55,7 +58,7 @@ $balance = $balance->getBalance();
             <!-- button profile -->
             <a class="btn btn-primary w-100 fs-3" href="../profile.php" role="button">Lihat Profile</a>
             <!-- topup -->
-            <a class="btn btn-primary w-100 fs-3" href="#" role="button">Topup saldo</a>
+            <a class="btn btn-primary w-100 fs-3" href="../topup.php" role="button">Topup saldo</a>
             <!-- logout -->
             <a class="btn btn-primary w-100 fs-3" href="../logout.php" role="button">Logout</a>
         </div>

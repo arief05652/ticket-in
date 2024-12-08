@@ -75,7 +75,6 @@ if (isset($_POST['hapus-bis'])) {
                         <th scope="col">Merk</th>
                         <th scope="col">Kapasitas</th>
                         <th scope="col">Plat</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
@@ -86,7 +85,6 @@ if (isset($_POST['hapus-bis'])) {
                             <td><?= htmlspecialchars($data['merk']); ?></td>
                             <td><?= htmlspecialchars($data['kapasitas']); ?></td>
                             <td><?= htmlspecialchars($data['plat_nomor']); ?></td>
-                            <td><?= htmlspecialchars($data['status']) ?></td>
                             <td>
                                 <button type="button" class="btn btn-danger mb-sm-1 mb-md-0" data-bs-toggle="modal" data-bs-target="#hapusModal" onclick="getRuteId(<?= $data['bis_id'] ?>)">
                                     <i class="material-symbols-outlined">delete</i>

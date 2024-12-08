@@ -9,30 +9,6 @@ class Jadwal
         $this->db = $db;
     }
 
-    public function lihatTujuan()
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT rute_id, tujuan FROM rute");
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $data;
-        } catch (PDOException $e) {
-            echo "Kesalahan: " . $e->getMessage();
-        }
-    }
-
-    public function lihatMerk()
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT bis_id, merk, plat_nomor FROM bis WHERE status = 'tidak'");
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $data;
-        } catch (PDOException $e) {
-            echo "Kesalahan: " . $e->getMessage();
-        }
-    }
-
     public function lihatJadwal()
     {
         try {

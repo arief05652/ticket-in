@@ -22,7 +22,7 @@ $detail = new Tiket($db);
 $balance = new Balance($db, $_SESSION['user_id']);
 $pesanan = new Pesanan($db);
 
-$tiket = $detail->showTiketUser($id);
+$tiket = $detail->showTiketDetail($id);
 $bal = (int) $balance->balance;
 
 $harga = $tiket['harga'];
