@@ -43,7 +43,7 @@ if (isset($_POST['submit-topup'])) {
         <div class="d-flex px-2 align-items-center justify-content-between mb-3">
             <h4>Data topup</h4>
             <div class="">
-                <a class="btn btn-danger" href="./dashboard.php" role="button">Dashboard</a>
+                <a class="btn btn-danger" href="./index.php" role="button">Dashboard</a>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#topupModal">
                     Topup
                 </button>

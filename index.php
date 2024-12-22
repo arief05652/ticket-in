@@ -67,8 +67,8 @@ if (isset($_POST['beli-tiket'])) {
     <?php } else { ?>
         <?php include 'utils/navbar_user.php' ?>
     <?php } ?>
-        
-    <?=  $message ?>
+
+    <?= $message ?>
 
     <!-- jumbotron -->
     <section style="margin-top: 57px; background-color: #78B3CE;">
@@ -94,7 +94,9 @@ if (isset($_POST['beli-tiket'])) {
     </section>
 
     <section class="mb-5" style="background-color: #0099ff;">
-        <div class="container pb-5">
+        <div class="container py-5">
+            <h1 class="text-center text-white fw-bold mb-2">Daftar Tiket</h1>
+            <hr>
             <div class="row">
                 <div class="overflow-x-auto">
                     <div class="d-flex">
@@ -102,11 +104,11 @@ if (isset($_POST['beli-tiket'])) {
                             <div class="col d-flex justify-content-around">
                                 <div class="card" style="width: 18rem;">
                                     <div class="card-body">
-                                        <h5 class="card-title text-center"><?= $data['tujuan'] ?></h5>
-                                        <p class="card-text lead">
-                                            Rp. <?= number_format($data['harga'], 0, ",", ".") ?><br>
+                                        <h5 class="card-title text-center pb-3"><?= $data['tujuan'] ?></h5>
+                                        <p class="card-text">
+                                            Harga: Rp. <?= number_format($data['harga'], 0, ",", ".") ?><br>
                                             Stok: <?= $data['stok'] ?><br>
-                                            <?= $data['jam_berangkat'] ?>
+                                            Tanggal: <?= $data['jam_berangkat'] ?>
                                         </p>
                                         <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#beli-tiket" onclick="getId(<?= $data['tiket_id'] ?>)">
                                             Beli tiket
@@ -119,6 +121,13 @@ if (isset($_POST['beli-tiket'])) {
                 </div>
             </div>
         </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#B1F0F7" fill-opacity="1" d="M0,32L30,26.7C60,21,120,11,180,53.3C240,96,300,192,360,197.3C420,203,480,117,540,69.3C600,21,660,11,720,48C780,85,840,171,900,197.3C960,224,1020,192,1080,160C1140,128,1200,96,1260,90.7C1320,85,1380,107,1410,117.3L1440,128L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"></path>
+        </svg>
+    </section>
+
+    <section style="background-color: #B1F0F7;">
+
     </section>
 
     <!-- modal beli tiket -->

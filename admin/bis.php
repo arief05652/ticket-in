@@ -59,11 +59,11 @@ if (isset($_POST['hapus-bis'])) {
     <!-- form rute -->
     <div class="container mt-5">
         <div class="d-flex px-2 align-items-center justify-content-between mb-3">
-            <h4>Data rute</h4>
+            <h4>Data Bis</h4>
             <div class="">
                 <a class="btn btn-danger" href="./dashboard.php" role="button">Dashboard</a>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahModal">
-                    Tambah rute
+                    Tambah bis
                 </button>
             </div>
         </div>
