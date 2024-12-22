@@ -138,6 +138,4 @@ class Tiket
             echo "Kesalahan: ". $e->getMessage();
         }
     }
-
-    
 }

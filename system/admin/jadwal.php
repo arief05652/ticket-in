@@ -68,15 +68,15 @@ class Jadwal
         }
     }
 
-    public function hapusJadwal($id)
-    {
-        try {
-            $stmt = $this->db->prepare("DELETE FROM jadwal WHERE jadwal_id = :jadwal_id");
-            $stmt->bindParam(":jadwal_id", $id);
-            $stmt->execute();
-            header("Location:../../admin/jadwal.php");
-        } catch (PDOException $e) {
-            echo "Kesalahan: " . $e->getMessage();
-        }
-    }
+    // public function hapusJadwal($id)
+    // {
+    //     try {
+    //         $stmt = $this->db->prepare("DELETE FROM jadwal WHERE jadwal_id = :jadwal_id");
+    //         $stmt->bindParam(":jadwal_id", $id);
+    //         $stmt->execute();
+    //         header("Location:../../admin/jadwal.php");
+    //     } catch (PDOException $e) {
+    //         echo "Kesalahan: " . $e->getMessage();
+    //     }
+    // }
 }

@@ -1,107 +1,110 @@
 @startuml class_diagram
 ' o = agregate
 
-Jadwal "1" -- "1" Bis
-Jadwal "1" -- "1" Rute
-Jadwal *-- Tiket
-User "1" -- "1" UserProfile
-Pesanan "0..1" -- "1" Tiket
-Pesanan "0..*" -- "1" User
-Balance "1" -- "1" User
-Topup "0..1" -- "1" User
-Topup "1" -- "1" Balance
+Pesanan "many" -- "1" Users
+Balance "many" -- "1" Users
+Topup "many" -- "1" Users
+Pesanan "many" -- "1" Tiket
+Jadwal "many" -- "1" Bis
+Jadwal "many" -- "1" Rute
+Tiket "many" -- "1" Jadwal
+Topup "many" -- "1" Balance
 
-class Topup {
-    + id_topup
-    + id_user
-    + id_balance
-    + jumlah
-
-    + topupBalance()
-    + cancelTopup()
-}
-
-class Balance {
-    + id_balance
-    + id_user
-    + Balance
-
-    + lihatBalance()
-}
-
-class Pesanan {
-    + id_pesanan
-    + id_tiket
-    + id_user
-    + jumlah
-
-    + buatPesanan()
-    + cancelPesanan()
-}
-
-class UserProfile {
-    + id_user
-
-    + lihatProfile()
-    + ubahProfile()
-    + lihatPesanan()
-    + lihatOrder()
-}
-
-class User {
-    + id_user
-    + email
+class Users {
+    + user_id
     + password
     + nama_depan
     + nama_belakang
-    + no_hp
-    
+    + nomor_hp
+    + role
+    + join_at
+
     + login()
     + register()
 }
 
-class Tiket {
-    + id_tiket
-    + id_jadwal
-    + harga
-    + stok
+class Pesanan {
+    + pesanan_id
+    + tiket_id
+    + user_id
+    + jumlah
+    + waktu_pesanan
 
-    + tambahTiket()
-    + ubahTiket()
-    + hapusTiket()
+    + lihatPesananProfile()
+    + beliTiket()
+    + batalkanTiket()
+    + lihatPesananById()
 }
 
 class Jadwal {
-    + id_jadwal
-    + id_rute
-    + id_bis
+    + jadwal_id
+    + rute_id
+    + bis_id
     + jam_berangkat
+    + status
 
     + lihatJadwal()
+    + tambahJadwal()
     + ubahJadwal()
-    + hapusJadwal()
 }
 
-class Rute {
-    + id_rute
-    + tujuan
-    + penjemputan
-    + penurunan
+class Tiket {
+    + tiket_id
+    + jadwal_id
+    + harga
+    + stok
+    + status
 
-    + lihatRute()
-    + ubahRute()
-    + hapusRute()
+    + showTiketDetail()
+    + lihatTiket()
+    + showTiketPublic()
+    + tambahTiket()
+    + updateStatus()
+    + updateTiket()
 }
 
 class Bis {
-    + id_bis 
+    + bis_id
     + merk
     + kapasitas
-    + plat
+    + plat_nomor
 
     + tambahBis()
-    + hapusBis()
+    + lihatBis()
     + ubahBis()
+    + hapusBis()
+    + lihatMerk()
+}
+
+class Rute {
+    + rute_id
+    + tujuan
+    + titik_penjemputan
+    + titik_penurunan
+
+    + lihatRute()
+    + ubahRute()
+    + tambahRute()
+    + hapusRute()
+}
+
+class Balance {
+    + balance_id
+    + balance
+
+    + getBalance()
+}
+
+class Topup {
+    + topup_id
+    + amount
+    + status
+    + waktu_topup
+
+    + lihatDaftar()
+    + lihatTopup()
+    + tolakTopup()
+    + tambahTopup()
 }
 
 @enduml

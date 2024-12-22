@@ -92,7 +92,7 @@ class Topup
             $stmt->bindParam(":user_id", $user_id);
             $stmt->bindParam(":balance_id", $balance_id);
             $stmt->execute();
-            header("Location: ../../topup.php");
+            header("Location: ../../index.php");
         } catch (Exception $e) {
             echo "Kesalahan: " . $e->getMessage();
         }
