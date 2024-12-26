@@ -16,6 +16,7 @@ $db = Database::getConnect();
 
 $rute = new Tiket($db);
 $pesanan = new Pesanan($db);
+
 $lihat_tujuan = $rute->showTiketPublic();
 
 $message = "";
@@ -39,7 +40,6 @@ if (isset($_POST['beli-tiket'])) {
         $message = "<script>alert('Uang anda tidak cukup')</script>";
     }
 }
-
 ?>
 
 <!doctype html>

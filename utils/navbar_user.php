@@ -1,8 +1,9 @@
 <?php 
+// Pastikan tidak ada output sebelum kode PHP
 if (isset($_POST['masuk'])) {
     header("Location: login.php");
     exit;
-} else if (isset($_POST['daftar'])) {
+} elseif (isset($_POST['daftar'])) {
     header("Location: register.php");
     exit;
 } elseif (isset($_POST['cari-ticket'])) {
@@ -10,7 +11,6 @@ if (isset($_POST['masuk'])) {
     exit;
 }
 ?>
-
 <nav class="navbar navbar-expand-lg border-bottom bg-body-secondary fixed-top">
     <div class="container">
         <a class="navbar-brand fw-bold" href="#">Ticket-In</a>

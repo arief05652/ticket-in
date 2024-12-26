@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $pass = $_POST['password'];
 
-    $login = new User(email: $email, password: $pass);
+    $login = new User($email, $pass);
     $login->login($db);
     $message = $login->message;
 }

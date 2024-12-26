@@ -28,12 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($password !== $re_type) {
         $message = "Harap masukan password dengan benar";
     } else {
-        $register = new User(
-                email: $email, 
-                password: $password, 
-                nama_depan: $nama_depan, 
-                nama_belakang: $nama_belakang
-            );
+        $register = new User($email, $password, $nama_depan, $nama_belakang);
         $register->register($db);
         $message = $register->message;
     }
