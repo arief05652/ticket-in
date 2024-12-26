@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   nginx:
     image: nginx
@@ -7,6 +9,8 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./conf.d:/etc/nginx/conf.d
       - ./:/var/www/html
+    networks:
+      - web_service
     depends_on:
       - web
 
@@ -16,11 +20,14 @@ services:
       - ./:/var/www/html
     ports:
       - "9000:9000"
+    networks:
+      - web_service
     depends_on:
       - db
 
   db:
     image: mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: wtunBwVrgdFMsmWf
       MYSQL_DATABASE: gdeuqhlz_project
@@ -28,12 +35,18 @@ services:
       MYSQL_PASSWORD: wtunBwVrgdFMsmWf
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - web_service
+    ports:
+      - "3306:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: wtunBwVrgdFMsmWf
+    networks:
+      - web_service
     depends_on:
       - db
     ports:
@@ -41,3 +54,6 @@ services:
 
 volumes:
   db_data:
+
+networks:
+  web_service:
