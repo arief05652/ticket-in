@@ -4,12 +4,8 @@ require_once './system/config/db.php';
 
 $db = Database::getConnect();
 
-
-$balance = new Balance(db: $db, user_id: $_SESSION['user_id']);
+$balance = new Balance($db, $_SESSION['user_id']);
 $balance = $balance->getBalance();
-
-
-
 ?>
 
 <!-- navbar -->
