@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Salin file proyek ke dalam kontainer
-COPY ./src /var/www/html
+COPY . /var/www/html
 
 # Pastikan pemilik dan izin direktori benar
 RUN chown -R www-data:www-data /var/www/html && \
