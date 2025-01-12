@@ -17,7 +17,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'pelanggan') {
 
 $message = "";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_POST['masuk'])) {
     $email = $_POST['email'];
     $pass = $_POST['password'];
 
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <!-- button -->
                         <div class="mb-4">
-                            <button class="btn btn-success w-100" type="submit">Masuk</button>
+                            <button name="masuk" class="btn btn-success w-100" type="submit">Masuk</button>
                         </div>
                         <div class="text-center">
                             <p>Belum punya akun? <a href="register.php">klik disini</a></p>

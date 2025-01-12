@@ -17,7 +17,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'pelanggan') {
 
 $message = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_POST['daftar'])) {
     // ambil dari form
     $email = $_POST['email'];
     $nama_depan = $_POST['nama-depan'];
