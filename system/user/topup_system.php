@@ -4,7 +4,7 @@ class Balance {
 
     public function __construct($db, $user_id) {
         try {
-            $stmt = $db->prepare("SELECT balance FROM cek_balance_user WHERE user_id = :user_id");
+            $stmt = $db->prepare("SELECT balance FROM balance WHERE user_id = :user_id");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
 
